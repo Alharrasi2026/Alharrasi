@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
 import { getSiteContent, updateSiteContent } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const content = await getSiteContent();
   return NextResponse.json(content);

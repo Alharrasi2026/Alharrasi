@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
 import { getProducts, createProduct } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const products = await getProducts();
   return NextResponse.json(products);

@@ -5,6 +5,8 @@ import { RopeDivider } from '@/components/RopeDivider';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { ProductIcon } from '@/components/icons';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const content = await getSiteContent();
   const products = (await getProducts()).slice(0, 3);

@@ -3,6 +3,8 @@ import { put, del } from '@vercel/blob';
 import { getSession } from '@/lib/auth';
 import { getMedia, addMedia, deleteMedia } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });

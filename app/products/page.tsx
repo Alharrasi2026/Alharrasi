@@ -8,6 +8,8 @@ export const metadata = {
   title: 'المجموعة الكاملة — الحراصي للحبال',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProductsPage() {
   const [products, content] = await Promise.all([getProducts(), getSiteContent()]);
 
