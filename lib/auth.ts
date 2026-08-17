@@ -34,3 +34,14 @@ export async function getSession(): Promise<{ username: string } | null> {
     return null;
   }
 }
+
+export async function verifyTokenFromString(token: string): Promise<{ username: string } | null> {
+  try {
+    const { payload } = await jwtVerify(token, secretKey());
+    return { username: payload.username as string };
+  } catch {
+    return null;
+  }
+}
+
+export const SESSION_COOKIE_NAME = COOKIE_NAME;

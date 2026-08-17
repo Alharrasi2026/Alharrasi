@@ -1,132 +1,76 @@
-# مصنع حبال الحراصي — نسخة Vercel
-## Al-Harrasi Ropes Factory — Vercel-Ready Version
+# مصنع الحراصي للحبال — الموقع الإلكتروني
 
-هذه نسخة معاد بناؤها بالكامل بتقنية **Next.js** لتعمل مباشرة على **Vercel** (مجاني للبداية)، مع:
-- 🌐 نفس تصميم الموقع الأصلي 100%
-- 🔐 لوحة تحكم بسيطة `/admin` لتغيير **النصوص والصور فقط**
-- 📧 نموذج تواصل يرسل بريداً إلكترونياً (Resend) ويعطي رابط واتساب
-- 🗄️ قاعدة بيانات Vercel Postgres + تخزين صور Vercel Blob
+موقع Next.js (App Router) بثلاث صفحات: الرئيسية، المجموعة الكاملة (المنتجات)، ولوحة تحكم `/admin` لتعديل النصوص والمنتجات والصور دون كتابة كود.
 
----
+## التقنيات
+- **Next.js 14** (App Router) + TypeScript
+- **Vercel Postgres** — تخزين النصوص والمنتجات
+- **Vercel Blob** — تخزين الصور المرفوعة
+- **jose + bcryptjs** — تسجيل دخول الأدمن بجلسة JWT في كوكي httpOnly
 
-## 🚀 خطوات النشر على Vercel
-
-### الخطوة 1 — ارفع المشروع على GitHub
-1. أنشئ مستودع (repository) جديد فارغ على GitHub
-2. ارفع كل ملفات هذا المجلد إليه:
+## التطوير محلياً
 ```bash
-git init
-git add .
-git commit -m "Al-Harrasi Ropes - Vercel version"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/harrasi-ropes.git
+npm install
+cp .env.example .env.local   # ثم عدّل AUTH_SECRET
+npm run dev
+```
+بدون ربط قاعدة بيانات، الموقع يعمل فوراً بمحتوى افتراضي (نفس نصوص المصنع الحالية) — مفيد للمعاينة السريعة. لوحة `/admin` تحتاج قاعدة بيانات فعلية لتسجيل الدخول والحفظ.
+
+## خطوات النشر على Vercel
+
+### ١ — ارفع المشروع إلى GitHub
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/alharrasi-ropes.git
 git push -u origin main
 ```
 
-### الخطوة 2 — استورد المشروع في Vercel
-1. اذهب إلى https://vercel.com/new
-2. اختر المستودع اللي رفعته
-3. اضغط **Deploy** (سيفشل أول مرة لأن قاعدة البيانات غير مربوطة بعد — طبيعي، أكمل للخطوة التالية)
+### ٢ — استورد المشروع في Vercel
+اذهب إلى [vercel.com/new](https://vercel.com/new) واختر المستودع. أول نشر سيفشل لأن قاعدة البيانات غير مربوطة بعد — طبيعي، أكمل للخطوة التالية.
 
-### الخطوة 3 — أضف قاعدة بيانات Vercel Postgres
-1. من داخل مشروعك في Vercel → تبويب **Storage**
-2. اضغط **Create Database** → اختر **Postgres**
-3. اربطها بالمشروع (Connect to Project)
-4. بعد الربط، اذهب إلى تبويب **Query** داخل قاعدة البيانات
-5. الصق محتوى ملف `schema.sql` بالكامل واضغط **Run**
+### ٣ — أضف Vercel Postgres
+من داخل المشروع في Vercel → تبويب **Storage** → **Create Database** → **Postgres** → اربطها بالمشروع. بعدها من تبويب **Query** الصق محتوى `schema.sql` بالكامل واضغط **Run**.
 
-### الخطوة 4 — أضف Vercel Blob (لتخزين الصور)
-1. من نفس تبويب **Storage** → **Create Database** → اختر **Blob**
-2. اربطها بالمشروع أيضاً
+### ٤ — أضف Vercel Blob
+من نفس تبويب **Storage** → **Create Database** → **Blob** → اربطها بالمشروع.
 
-### الخطوة 5 — أضف متغيرات البيئة (Environment Variables)
-من **Project Settings → Environment Variables** أضف:
+### ٥ — أضف متغيرات البيئة
+**Project Settings → Environment Variables:**
 
 | المتغير | القيمة |
 |---|---|
-| `AUTH_SECRET` | أي نص عشوائي طويل (32+ حرف) |
-| `RESEND_API_KEY` | مفتاح من https://resend.com (مجاني، للإيميلات) |
-| `MAIL_FROM` | `Al-Harrasi Ropes <onboarding@resend.dev>` |
-| `MAIL_TO` | `Alharrasi.ropf@hotmail.com` |
-| `WA_PHONE` | `96890103771` |
+| `AUTH_SECRET` | نص عشوائي طويل (٣٢ حرف فأكثر) |
 
-> ملاحظة: متغيرات `POSTGRES_URL` و `BLOB_READ_WRITE_TOKEN` تُضاف تلقائياً عند ربط قاعدة البيانات والـ Blob في الخطوتين 3 و 4.
+> `POSTGRES_URL` و `BLOB_READ_WRITE_TOKEN` تُضاف تلقائياً عند ربط قاعدة البيانات والـ Blob في الخطوتين ٣ و٤.
 
-### الخطوة 6 — أعد النشر (Redeploy)
-من تبويب **Deployments** → اضغط على آخر نشر → **Redeploy**
+### ٦ — أعد النشر
+من تبويب **Deployments** → آخر نشر → **Redeploy**.
 
-### الخطوة 7 — ربط دومين Namecheap
-1. في Vercel: **Project Settings → Domains** → أضف الدومين (مثال: `harrasiropes.com`)
-2. Vercel سيعطيك سجلات DNS (عادة CNAME أو A record)
-3. في Namecheap: **Domain List → Manage → Advanced DNS**
-4. أضف السجلات اللي أعطاك إياها Vercel:
-   - Type: `A`, Host: `@`, Value: `76.76.21.21` (أو القيمة اللي تظهر لك في Vercel)
-   - Type: `CNAME`, Host: `www`, Value: `cname.vercel-dns.com`
-5. انتظر 30-60 دقيقة لانتشار DNS
-6. Vercel سيفعّل SSL (https) تلقائياً ومجاناً
+### ٧ — ربط دومين alharrasiropes.com
+**Project Settings → Domains** → أضف الدومين، وأضف سجلات الـ DNS التي يعطيك إياها Vercel في لوحة تحكم Namecheap.
 
----
+## تسجيل الدخول للوحة التحكم
+بعد تشغيل `schema.sql`، افتح `/admin` وسجّل الدخول بـ:
+- **اسم المستخدم:** `admin`
+- **كلمة المرور:** `Harrasi@2026`
 
-## 🔑 الدخول إلى لوحة التحكم
-- الرابط: `https://yourdomain.com/admin`
-- اسم المستخدم: `admin`
-- كلمة المرور: `Admin@123`
+**غيّر كلمة المرور فوراً** من لوحة التحكم → الإعدادات → تغيير كلمة المرور.
 
-⚠️ **لتغيير كلمة المرور:** شغّل هذا الأمر محلياً لإنشاء كلمة مرور جديدة، ثم حدّث الصف في جدول `admin_users` عبر Vercel Postgres Query tab:
-```bash
-node -e "console.log(require('bcryptjs').hashSync('كلمة_المرور_الجديدة', 10))"
-```
-```sql
-UPDATE admin_users SET password_hash = 'الهاش_الناتج' WHERE username = 'admin';
-```
-
----
-
-## 💻 التشغيل محلياً (اختياري، للتجربة قبل النشر)
-```bash
-npm install
-cp .env.example .env.local
-# عبّي المتغيرات في .env.local (تحتاج قاعدة بيانات Vercel Postgres حتى محلياً،
-# أو استخدم vercel env pull بعد ربط المشروع بـ Vercel CLI)
-npm run dev
-```
-افتح `http://localhost:3000`
-
----
-
-## 📁 هيكل المشروع
+## هيكل المشروع
 ```
 app/
-├── route.ts              ← يخدم الموقع الرئيسي (يقرأ النصوص/الصور من القاعدة)
-├── layout.tsx             ← Layout أساسي (للوحة التحكم فقط)
-├── admin/page.tsx          ← لوحة التحكم (نصوص + صور)
-└── api/
-    ├── auth/route.ts       ← تسجيل الدخول/الخروج
-    ├── content/route.ts    ← قراءة/تحديث النصوص
-    ├── media/route.ts      ← رفع الصور (Vercel Blob)
-    └── contact/route.ts    ← استقبال نموذج التواصل + إرسال إيميل
-lib/
-├── db.ts                  ← اتصال قاعدة البيانات
-└── auth.ts                ← جلسة تسجيل الدخول (JWT في كوكي)
-public/
-└── site-template.html      ← ملف الموقع الأصلي كاملاً مع رموز {{...}} قابلة للاستبدال
-schema.sql                  ← أوامر إنشاء الجداول (تُشغَّل مرة واحدة على Vercel Postgres)
+  page.tsx              الصفحة الرئيسية
+  products/              صفحة المجموعة الكاملة + فلترة القطاعات
+  admin/
+    login/page.tsx       تسجيل الدخول
+    page.tsx + AdminDashboard.tsx   لوحة التحكم
+  api/
+    content/              GET عام، PUT محمي — نصوص الموقع
+    products/              GET عام، POST محمي — قائمة المنتجات
+    products/[id]/          PUT / DELETE محمي — تعديل وحذف منتج
+    media/                  GET/POST/DELETE محمي — مكتبة الصور (Vercel Blob)
+    admin/login|logout|password/   تسجيل الدخول والخروج وتغيير كلمة المرور
+lib/db.ts               استعلامات قاعدة البيانات
+lib/auth.ts              الجلسات (JWT)
+middleware.ts            يحمي /admin ويحوّل لتسجيل الدخول عند عدم وجود جلسة
+schema.sql                هيكل قاعدة البيانات + بيانات أولية
 ```
-
----
-
-## 💰 التكلفة المتوقعة (خطة Vercel المجانية Hobby)
-| الخدمة | الحد المجاني |
-|---|---|
-| الاستضافة (Bandwidth) | 100 GB شهرياً |
-| قاعدة البيانات Postgres | كافية لموقع صغير-متوسط |
-| تخزين الصور Blob | 1 GB مساحة، 10 GB نقل شهرياً |
-| البريد (Resend) | 3000 إيميل شهرياً مجاناً |
-
-⚠️ **ملاحظة مهمة:** خطة Vercel المجانية (Hobby) مخصصة رسمياً للاستخدام **الشخصي وغير التجاري**. بما أن هذا موقع تجاري لمصنع، يُنصح بالانتقال لخطة **Pro ($20/شهر)** عند بدء الاستخدام الفعلي لتفادي أي قيود مستقبلية. إذا زاد حجم الصور عن 1GB، فكّر أيضاً بالانتقال إلى Supabase Storage كبديل أرخص للتخزين فقط (يمكن دمجه بسهولة لاحقاً).
-
----
-
-## 📞 للاستفسار
-البريد: Alharrasi.ropf@hotmail.com
-واتساب: +968 9010 3771

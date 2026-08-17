@@ -1,5 +1,5 @@
 {
-  "name": "harrasi-ropes-site",
+  "name": "alharrasi-ropes",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -15,8 +15,7 @@
     "jose": "^5.10.0",
     "next": "^14.2.35",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "resend": "^4.8.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
